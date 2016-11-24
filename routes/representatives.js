@@ -7,32 +7,36 @@ module.exports = (db) => {
   // GET all us senators or house reps or country level execs
   router.route('/:levelOfGov/:branchOfGov/:role/:country')
     .get(getAllFn)
-    
+
   function getAllFn(req, res, next) {
     const q = req.params;
-    // console.log(q);
 
     // TODO: Use query params in db query, not if statement
+    // TODO: Make a representatives collection and place senators, houseReps,
     // Role is not used when branchOfGov=executive
     if (q.levelOfGov === 'country' && q.country.toLowerCase() === 'us') {
       if (q.branchOfGov === 'legislative') {
         if (q.role === 'upper') {
           db.collection(SENATORS)
             .findOne()
-            .then(data => { res.json(data); });
+            .then(data => res.json(data))
         } else if (q.role === 'lower') {
           db.collection(HOUSEREPS)
             .findOne()
-            .then(data => { res.json(data); });
+            .then(data => res.json(data))
         } else {
-          res.status(400).json({ msg: 'Invalid role in request url' });
+          const msg = `Invalid role in request url: ${q.role}`
+          res.status(400).json({ msg: msg })
+          next(new Error(msg))
         }
       } else if (q.branchOfGov === 'executive') {
         db.collection(EXECUTIVE)
           .findOne({ iso_a2: q.country.toUpperCase() })
-          .then(data => { res.json(data); });
+          .then(data => res.json(data))
       } else {
-        res.status(400).json({ msg: 'Invalid branchOfGov in request url' });
+        const msg = `Invalid branch of gov in request url: ${q.branchOfGov}`
+        res.status(400).json({ msg: msg })
+        next(new Error(msg))
       }
     } else if (q.levelOfGov === 'state' && q.country.toLowerCase() === 'us') {
       if (q.branchOfGov === 'legislative') {
@@ -52,6 +56,7 @@ module.exports = (db) => {
       }
     } else {
       res.status(400).json({ msg: 'Invalid request url' });
+      next(new Error(`Invalid request url`))
     }
   }
 

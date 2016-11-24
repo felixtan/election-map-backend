@@ -7,13 +7,9 @@ module.exports = (db) => {
 
   function getByCountry(req, res, next) {
     const q = req.params;
-    db.collection(ELECTIONS).findOne({ iso_a2: q.country.toUpperCase() }).then((err, doc) => {
-      if (err) {
-        res.json(err);
-      } else {
-        res.json(doc);
-      }
-    });
+    db.collection(ELECTIONS)
+      .findOne({ iso_a2: q.country.toUpperCase() })
+      .then(doc => res.json(doc))
   }
 
   return router

@@ -1,22 +1,28 @@
 {
-  "name": "politics-map",
-  "version": "0.0.1",
+  "name": "politics-map-server",
+  "version": "0.1.0",
   "description": "Manages the database for the politics-map applications",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon --exec \"npm run lint && npm start\" --ignore public/js",
+    "prod": "NODE_ENV=production nodemon --exec \"npm run lint && npm start\"",
+    "dev": "nodemon --exec \"npm run lint && npm start\"",
     "lint": "eslint index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Felix Tan",
   "license": "UNLICENSED",
+  "engines": {
+    "node": "7.1.0"
+  },
   "dependencies": {
     "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
     "express": "^4.14.0",
     "lodash": "^4.16.4",
     "mongodb": "^2.2.10",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "cheerio": "^0.22.0",

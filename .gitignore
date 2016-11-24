@@ -11,4 +11,4 @@ node_modules
 # scripts
 scripts
 data
-utils
+utils/helpers.js
