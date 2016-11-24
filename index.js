@@ -29,16 +29,6 @@ if (cluster.isMaster) {
 
   const app = express()
 
-  // middleware
-  app.use(compression({ level: 9 }))
-  app.use(require('morgan')('combined', { stream: logger.stream }))
-  app.use('/', bodyParser.json());
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-  });
-
   client.connect(config.uri, (err, db) => {
     if (err) throw err;
     logger.log('info', `Connected to mongodb.`);
@@ -50,6 +40,16 @@ if (cluster.isMaster) {
     // Connect routers to app
     app.use('/api/v1/representatives', representativesRouter)
     app.use('/api/v1/elections', electionsRouter)
+
+    // middleware
+    app.use(compression({ level: 9 }))
+    app.use(require('morgan')('combined', { stream: logger.stream }))
+    app.use('/', bodyParser.json());
+    app.use((req, res, next) => {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+      next();
+    });
 
     const PORT = process.env.PORT || 8000;
     app.listen(PORT, () => {
