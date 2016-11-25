@@ -9,7 +9,11 @@ module.exports = (db) => {
     const q = req.params;
     db.collection(ELECTIONS)
       .findOne({ iso_a2: q.country.toUpperCase() })
-      .then(doc => res.json(doc))
+      .then(doc => {
+        res.json(doc)
+        // console.log(res._header)
+        console.log(res._headers)
+      })
   }
 
   return router
