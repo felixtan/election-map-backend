@@ -12,7 +12,7 @@ module.exports = (db) => {
       .then(doc => {
         res.json(doc)
         // console.log(res._header)
-        console.log(res._headers)
+        // console.log(res._headers)
       })
   }
 
