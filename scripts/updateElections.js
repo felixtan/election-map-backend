@@ -1,19 +1,18 @@
 // 2016
 
-import _ from 'lodash'
-import Promise from 'bluebird';
-import { MongoClient, ObjectId } from 'mongodb';
-import dbconfig from '../config/mongo';
-import houseWinners from '../data/2016HouseElectionWinners'
-import partyCodeToName from '../data/partyCodeToName'
-import partyLetterToCode from '../data/partyLetterToCode'
+const _ = require('lodash')
+const Promise = require('bluebird')
+const MongoClient = require('mongodb').MongoClient
+const ObjectId = require('mongodb').ObjectId
+const dbconfig = require('../config/mongo')
+const houseWinners = require('../../external-data/2016HouseElectionWinners')
 
 const ELECTIONS = 'elections'
 const LEVEL = 'country'
-const BRANCH = 'executive'
-const STATE = 'KS'
-// const DIST = 1
-const INDEX = 2
+const BRANCH = 'legislativeLower'
+const STATE = 'AS'
+const DIST = 1
+const INDEX = 1
 
 const fixWinners = [
   {
@@ -49,31 +48,32 @@ MongoClient.connect(dbconfig.uri, (err, db) => {
 
     // console.log(doc[LEVEL][BRANCH][STATE].candidates[INDEX])
     // const error = `${LEVEL}.${BRANCH}.${STATE}.${DIST}.photo`
-    const cand = `${LEVEL}.${BRANCH}.${STATE}.candidates`
-    const changes = `${LEVEL}.${BRANCH}.${STATE}.candidates.${INDEX}.photo.changes`
-    const url = `${LEVEL}.${BRANCH}.candidates.${INDEX}.photo.url`
-    const atr = `${LEVEL}.${BRANCH}.candidates.${INDEX}.photo.attrib`
-    const title = `${LEVEL}.${BRANCH}.${STATE}.candidates.${INDEX}.photo.title`
-    const source = `${LEVEL}.${BRANCH}.${STATE}.candidates.${INDEX}.photo.source`
-    const name = `${LEVEL}.${BRANCH}.${STATE}.candidates.${INDEX}.name`
-    const party = `${LEVEL}.${BRANCH}.${STATE}.candidates.${INDEX}.party`
-    const address = `${LEVEL}.${BRANCH}.${STATE}.candidates.${INDEX}.address`
+    const area = `${LEVEL}.${BRANCH}.${STATE}.${DIST}`
+    const candidates = `${area}.candidates`
+    const winner = `${area}.winner`
+    const cand = `${candidates}.${INDEX}`
+    const photo = `${cand}.photo`
+    const name = `${cand}.name`
+    const party = `${cand}.party`
+    const address = `${cand}.address`
+    const photoChanges = `${photo}.changes`
+    const photoUrl = `${photo}.url`
+    const photoAttrib = `${photo}.attrib`
+    const photoTitle = `${photo}.title`
+    const photoSource = `${photo}.source`
 
     // _.each(fixWinners, fix => {
     //   const name = `${LEVEL}.${BRANCH}.${fix.state}.candidates`
       elections.update({ iso_a2: 'US'}, {
         // $pull: {
-        //   [cand]: { name: "Gregory Orman" }
+        //   [candidates]: { name: "Gordon Ackley" }
         // }
         $set: {
-          // [name]: "Gary Swing",
-          // [party]: "Green Party",
-          // [address]: [],
-          // [title]: "John Neely Kennedy's portrait as Treasurer of Louisiana in 2014.",
-          [atr]: "public domain",
-          // [source]: "https://www.flickr.com/photos/36823845n08/28156075060/",
-          [url]: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Evan_McMullin_2016-10-21_headshot.jpg/180px-Evan_McMullin_2016-10-21_headshot.jpg",
-          // [changes]: null,
+          [name]: "Vaitinasa Salu Hunkin-Finau",
+          [winner]: {
+            name: "Aumua Amata Coleman Radewagen",
+            party: "Republican Party"
+          }
         }
       }, null, (err, result) => {
         console.log(result.result)

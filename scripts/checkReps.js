@@ -1,15 +1,14 @@
-import _ from 'lodash';
-import fetch from 'node-fetch';
-import MongoClient from 'mongodb';
-import dbconfig from '../config/mongo';
-import statesLetterCodeToName from '../../app/fixtures/statesLetterCodeToName'
-import { delay } from '../utils/helpers';
+const _ = require('lodash')
+const fetch = require('node-fetch')
+const MongoClient = require('mongodb')
+const dbconfig = require('../config/mongo')
+const statesLetterCodeToName = require('../../client-dev/app/fixtures/statesLetterCodeToName')
 
 // const LEVEL = "country"
 // const BRANCH = 'legislativeLower'
 const STATE = 'NY'
-const DIST = 13
-const collectionName = "houseReps"
+const DIST = 1
+const collectionName = "countryExecutives"
 
 MongoClient.connect(dbconfig.uri, (err, db) => {
   if (err) throw err;
@@ -17,29 +16,31 @@ MongoClient.connect(dbconfig.uri, (err, db) => {
   const collection = db.collection(collectionName);
   let count = 0
 
-  collection.findOne().then(doc => {
+  collection.findOne({ iso_a2: 'US' }).then(doc => {
     delete doc._id
     // CHECK ONE
-    console.log(doc[STATE][DIST])
+    // console.log(doc)
 
     // CHECK ALL
-    // _.each(doc, (state, stateCode) => {
-    //   _.each(state, (senator, index) => {
-    //     count++
-    //     if (senator.photo === undefined || senator.photo === null || senator.photo.url === null || senator.photo.url.length === 0) {
-    //       console.log(`no photo: ${stateCode}`)
-    //     } else {
-    //       if (senator.photo.attrib === 'public domain') {
-    //         // console.log(`no attrib or source, these better be public domain: ${stateCode} ${distNum}`)
-    //       } else {
-    //         if (!_.includes(senator.photo.url, '.gov')) {
-    //           console.log(`not gov: ${stateCode}: ${senator.photo.url}`)
-    //         }
-    //       }
-    //     }
-    //   })
-    // })
-    //
-    // console.log(`count: ${count}`)
+    _.each(doc.representatives, (rep, title) => {
+      // _.each(stateData, (rep, index) => {
+        count++
+        if (rep.party !== 'Independent' && !_.includes(rep.party, 'Party')) {
+          console.log(`add party to: ${rep.party}`)
+          // const party = `representatives.${title}.party`
+          // collection.update({ iso_a2: 'US' }, {
+          //   $set: {
+          //     [party]: `${rep.party} Party`
+          //   }
+          // }, null, (err, result) => {
+          //   console.log(`updated ${title}`)
+          // })
+        } else {
+          //
+        }
+      // })
+    })
+
+    console.log(`count: ${count}`)
   });
 });

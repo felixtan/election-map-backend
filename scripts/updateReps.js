@@ -1,28 +1,33 @@
-import _ from 'lodash';
-import MongoClient from 'mongodb';
-import dbconfig from '../config/mongo';
-import statesLetterCodeToName from '../../app/fixtures/statesLetterCodeToName'
+const _ = require('lodash')
+const MongoClient = require('mongodb')
+const dbconfig = require('../config/mongo')
+const statesLetterCodeToName = require('../../client-dev/app/fixtures/statesLetterCodeToName')
 
-const collectionName = "senators"
+const collectionName = "houseReps"
 
 MongoClient.connect(dbconfig.uri, (err, db) => {
   if (err) throw err;
 
   const collection = db.collection(collectionName);
 
-  const STATE = 'NC'
+  const STATE = 'VI'
   const DIST = 1
   // const INDEX = 0
-  const reps = `${STATE}`
+  const rep = `${STATE}.${DIST}`
+  const name = `${rep}.name`
+  const party = `${rep}.party`
+  const photoUrl = `${rep}.photo.url`
 
   // UPDATE ONE
   collection.findOneAndUpdate({}, {
-    $pull: {
-      [reps]: null
+    $set: {
+      [name]: "Stacey Plaskett",
+      [party]: "Democratic Party",
+      [photoUrl]: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Rep._Stacey_E._Plaskett_%28VI%29.jpg/192px-Rep._Stacey_E._Plaskett_%28VI%29.jpg'
   }}, null, (err, result) => {
     // doesn't show the updated form
     if (result.ok) {
-      console.log(`updated rep ${STATE}`)
+      console.log(`updated rep ${STATE} ${DIST}`)
     } else {
       console.log('update failed')
     }
