@@ -11,8 +11,6 @@ module.exports = (db) => {
       .findOne({ iso_a2: q.country.toUpperCase() })
       .then(doc => {
         res.json(doc)
-        // console.log(res._header)
-        // console.log(res._headers)
       })
   }
 

@@ -1,7 +1,7 @@
 {
-  "name": "politics-map-server",
+  "name": "politics-map-backend",
   "version": "0.1.0",
-  "description": "Manages the database for the politics-map applications",
+  "description": "Manages the api and database for the politics-map clients",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

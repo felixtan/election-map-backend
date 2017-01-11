@@ -32,7 +32,9 @@ if (cluster.isMaster) {
   // middleware
   app.use(compression({ level: 9 }))
   app.use(require('morgan')('combined', { stream: logger.stream }))
-  app.use('/', bodyParser.json());
+  app.use('/', bodyParser.json())
+
+  // Headers for CORS compliance
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method')

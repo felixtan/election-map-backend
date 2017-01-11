@@ -11,8 +11,8 @@ module.exports = (db) => {
   function getAllFn(req, res, next) {
     const q = req.params;
 
-    // TODO: Use query params in db query, not if statement
-    // TODO: Make a representatives collection and place senators, houseReps,
+    // TODO: Tidy up this if-else chaining
+    // TODO: Make a representatives collection and place senators, houseReps inside
     // Role is not used when branchOfGov=executive
     if (q.levelOfGov === 'country' && q.country.toLowerCase() === 'us') {
       if (q.branchOfGov === 'legislative') {
