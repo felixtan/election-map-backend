@@ -25,7 +25,7 @@ if (cluster.isMaster) {
   const client = require('mongodb')
   const bodyParser = require('body-parser')
   const compression = require('compression')
-  const config = require('./config/mongo')
+  const mongoUri = require('./config/mongo').uri
 
   const app = express()
 
@@ -42,7 +42,7 @@ if (cluster.isMaster) {
     next()
   })
 
-  client.connect(config.uri, (err, db) => {
+  client.connect(mongoUri, (err, db) => {
     if (err) throw err;
     logger.log('info', `Connected to mongodb.`);
 
@@ -55,6 +55,7 @@ if (cluster.isMaster) {
     app.use('/api/v1/elections', electionsRouter)
 
     const PORT = process.env.PORT || 8000;
+
     app.listen(PORT, () => {
       logger.log(`Listening on port ${PORT}.`);
     });
