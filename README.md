@@ -3,7 +3,7 @@
 Backend for [politics-map](https://github.com/felixtan/politics-map-web-client) clients.
 
 ## Config
-Make a `config` directory in the root and a `mongo.js` file inside of it. It should export a mongodb connection string like this:
+Make a `config` directory in the root and a `mongo.js` file inside of it. It should export a mongodb connection string for the database like this:
 ```javascript
 {
   uri: "mongodb://<username>:<password>@<host>:<port>/<dbname>"
@@ -62,7 +62,7 @@ The structure of individual elected officials is based on the structure of repre
 ```
 
 ### Executive
-The representatives of the executive branch are stored in a document in the `countryExecutives` collection. This is unlike the structure for members of Congress below because my eventual goal is to represent other countries on the map. A country's document would be referred via its [two-letter ISO code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+The representatives of the executive branch are stored in a document in the `countryExecutives` collection. This is unlike the structure for members of Congress below because my eventual goal is to represent other countries on the map. A country's document would be referred to via its [two-letter ISO code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 ```javascript
 {
     "iso_a2": "US",
@@ -102,6 +102,50 @@ In the `houseReps` collection, states are represented as objects whose keys are 
     "AK": {
         "1": Representative
     },
+    "AS": {
+        "1": Representative
+    },
     ...
+}
+```
+
+### Elections
+
+Elections for an individual office are represented as such. The value of the `candidates` key is an array of objects with structure like that of elected officials (see **Representative** above) where the data for candidates is filled out.
+```javascript
+{
+    candidates: [Representatives],
+    winner: {
+        "name": "",
+        "party": ""
+    }
+}
+```
+
+Documents in the `elections` collection contain such **Election** objects for each office up for election in a given year. If a particular office is not up for election, then its value is `null`. Here the Senate is referred to as `legislativeUpper` and the House is referred to as `legislativeLower`. `country` refers to elections at the federal/national level of government.
+```javascript
+{
+    iso_a2: 'US',
+    iso_a3: 'USA',
+    country: {
+        executive: Election,
+        legislativeUpper: {
+            "AL": Election,
+            "AK": Election,
+            "AZ": Election,
+            ...
+        },
+        legislativeLower: {
+            "AK": {
+                "1": Election,
+                "2": Election,
+                ...
+                "7": Election
+            },
+            "AK": {
+                "1": Election
+            },
+            ...
+        }
 }
 ```

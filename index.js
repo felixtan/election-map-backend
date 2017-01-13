@@ -11,7 +11,7 @@ if (cluster.isMaster) {
     cluster.fork()
   }
 
-  cluster.on('online', (worker) => {
+  cluster.on('online', worker => {
     logger.log('info', `Worker pid=${worker.process.pid} is online.`);
   })
 
@@ -58,6 +58,10 @@ if (cluster.isMaster) {
 
     app.listen(PORT, () => {
       logger.log(`Listening on port ${PORT}.`);
+      db.collection('elections').findOne().then(data => {
+        console.log(data)
+        // Object.keys(data)
+      })
     });
   });
 }
