@@ -21,7 +21,7 @@ npm run dev
 ```
 
 ## Data structure and Overview
-The structure of the data is described below. There are three "levels" of representation displayed on the map. They correspond to the Executive or White House, the Senate, and the House of Representatives. Each level of representation corresponds to a geographical level: the country, state, and sub-state levels, respectively. All representatives at each level are stored in a single document and are loaded at once.
+The structure of the data is described below. There are three "levels" of representation displayed on the map. They correspond to the Executive or White House, the Senate, and the House of Representatives. Each level of representation corresponds to a politicogeographical level: the country, state, and sub-state levels, respectively. All representatives at each level are stored in a single document and are loaded at once.
 
 ### Representative
 The structure of individual elected officials is based on the structure of representatives in [Google's Civic Info API](https://developers.google.com/civic-information/).
