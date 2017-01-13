@@ -43,8 +43,8 @@ if (cluster.isMaster) {
   })
 
   client.connect(mongoUri, (err, db) => {
-    if (err) throw err;
-    logger.log('info', `Connected to mongodb.`);
+    if (err) throw err
+    logger.log('info', `Connected to mongodb.`)
 
     // Resource routers
     const representativesRouter = require('./routes/representatives')(db)
@@ -54,14 +54,10 @@ if (cluster.isMaster) {
     app.use('/api/v1/representatives', representativesRouter)
     app.use('/api/v1/elections', electionsRouter)
 
-    const PORT = process.env.PORT || 8000;
+    const PORT = process.env.PORT || 8000
 
     app.listen(PORT, () => {
-      logger.log(`Listening on port ${PORT}.`);
-      db.collection('elections').findOne().then(data => {
-        console.log(data)
-        // Object.keys(data)
-      })
-    });
-  });
+      logger.log(`Listening on port ${PORT}.`)
+    })
+  })
 }
