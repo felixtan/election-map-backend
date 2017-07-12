@@ -1,6 +1,6 @@
-# Politics Map (Backend)
+# Election Map (Backend)
 
-Backend for [politics-map](https://github.com/felixtan/politics-map-web-client) clients.
+Backend for [election-map](https://github.com/felixtan/election-map-web-client) clients.
 
 ## Config
 Make a `config` directory in the root and a `mongo.js` file inside of it. It should export a mongodb connection string for the database like this:
